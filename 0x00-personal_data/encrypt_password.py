@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """defines an encryption function"""
 import bcrypt
-from typing import ByteString
 
 
-def hash_password(password: str) -> ByteString:
+def hash_password(password: str) -> bytes:
     """hashes a apassword"""
     password = password.encode('utf-8')
     return bcrypt.hashpw(password, bcrypt.gensalt())
