@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """defines a filter_datum function"""
+import logging
 import re
 from typing import List
 
@@ -19,7 +20,46 @@ def filter_datum(fields: List[str],
     Returns:
         str: the log message obfuscated
     """
-    escape = map(re.escape, fields)
-    fields_regex = '|'.join(escape)
-    pattern = f'({fields_regex}=)[^{re.escape(separator)}]*'
-    return re.sub(pattern, f'\\1{redaction}', message)
+    for field in fields:
+        pattern = fr'{field}=[^{separator}]*'
+        message = re.sub(pattern, f'{field}={redaction}', message)
+    return message
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]) -> None:
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        """fomat record message
+        """
+        record.msg = filter_datum(self.fields,
+                                  self.REDACTION,
+                                  record.msg,
+                                  self.SEPARATOR)
+        return super(RedactingFormatter, self).format(record)
+
+
+PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
+
+
+def get_logger() -> logging.Logger:
+    """returns a logger object"""
+    logger = logging.getLogger('user_data')
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    stream_handeler = logging.StreamHandler()
+    formater = logging.Formatter(PII_FIELDS)
+
+    stream_handeler.setFormatter(formater)
+    logger.addHandler(stream_handeler)
+    return logger
