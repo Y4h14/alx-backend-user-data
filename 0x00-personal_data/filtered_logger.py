@@ -85,3 +85,8 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         return db_connector
     except mysql.connector.Error as err:
         return None
+
+
+def main():
+    """main funciton"""
+    pass
