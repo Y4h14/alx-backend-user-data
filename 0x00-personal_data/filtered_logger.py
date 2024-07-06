@@ -2,7 +2,9 @@
 """defines a filter_datum function"""
 import logging
 import re
+import mysql.connector
 from typing import List
+from os import getenv
 
 
 def filter_datum(fields: List[str],
@@ -64,3 +66,22 @@ def get_logger() -> logging.Logger:
     stream_handeler.setFormatter(formater)
     logger.addHandler(stream_handeler)
     return logger
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """connects to a database and return a curouser"""
+    user = getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    db = getenv('PERSONAL_DATA_DB_NAME', 'holberton')
+
+    try:
+        db_connector = mysql.connector.connect(
+                user=user,
+                password=password,
+                host=host,
+                database=db
+                )
+        return db_connector
+    except mysql.connector.Error as err:
+        return None
