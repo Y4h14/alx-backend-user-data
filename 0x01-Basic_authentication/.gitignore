@@ -1,2 +1,5 @@
 /FlaskApi
 /SampleAPI
+/__pycache__
+/api/v1/views/__pycache__/
+/api/v1/__pycache__/
