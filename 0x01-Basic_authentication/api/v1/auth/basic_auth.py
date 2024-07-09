@@ -3,6 +3,7 @@
 from .auth import Auth
 import base64
 import binascii
+from typing import Tuple
 
 
 class BasicAuth(Auth):
@@ -29,8 +30,9 @@ class BasicAuth(Auth):
         else:
             return None
 
-    def decode_base64_authorization_header(self,
-                                           base64_authorization_header: str) -> str:
+    def decode_base64_authorization_header(
+            self,
+            base64_authorization_header: str) -> str:
         """_summary_
 
         Args:
@@ -51,3 +53,21 @@ class BasicAuth(Auth):
                     return None
         else:
             return None
+
+    def extract_user_credentials(
+            self,
+            decoded_base64_authorization_header: str) -> (str, str):
+        """returns the user email and password from the Base64 decoded value.
+
+        Args:
+            str (_type_): _description_
+        """
+        if decoded_base64_authorization_header:
+            if isinstance(decoded_base64_authorization_header, str):
+                parts = decoded_base64_authorization_header.split(':', 1)
+                if len(parts) != 2:
+                    return None, None
+                email, password = parts
+                return email, password
+
+        return None, None
