@@ -3,3 +3,4 @@
 /__pycache__
 api/v1/views/__pycache__/
 api/v1/__pycache__/
+main.py

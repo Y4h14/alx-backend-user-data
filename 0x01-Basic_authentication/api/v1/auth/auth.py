@@ -12,13 +12,24 @@ class Auth():
         """_summary_
 
         Args:
-            path (str): _description_
-            excluded_paths (List[str]): _description_
+            path (str): the request path
+            excluded_paths (List[str]):
+            list of pathes that require authentication
 
         Returns:
-            bool: False - path and excluded_paths
+            bool: returns True if the path is not
+            in the list of strings excluded_paths
         """
-        pass
+        if path is None or excluded_paths is None or excluded_paths == []:
+            return True
+
+        if not path.endswith('/'):
+            path = path + '/'
+
+        if path in excluded_paths:
+            return False
+        else:
+            return True
 
     def authorization_header(self, request=None) -> str:
         """_summary_
