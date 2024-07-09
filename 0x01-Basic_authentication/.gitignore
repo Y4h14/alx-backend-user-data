@@ -5,3 +5,4 @@ api/v1/views/__pycache__/
 api/v1/__pycache__/
 main.py
 /api/v1/auth/__pycache__/
+.db_User.json
