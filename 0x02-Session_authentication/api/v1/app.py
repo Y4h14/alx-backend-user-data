@@ -65,6 +65,7 @@ def authenticate():
 
         if user is None:
             abort(403)
+        request.current_user = user
 
 
 if __name__ == "__main__":
