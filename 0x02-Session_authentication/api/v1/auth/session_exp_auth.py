@@ -2,7 +2,7 @@
 """define a class for expiring sessions"""
 from .session_auth import SessionAuth
 from os import getenv
-import datetime
+from datetime import datetime, timedelta
 
 
 class SessionExpAuth(SessionAuth):
@@ -21,7 +21,7 @@ class SessionExpAuth(SessionAuth):
         if not session_id:
             return None
         self.user_id_by_session_id[session_id] = {
-            'user_id': user_id, 
+            'user_id': user_id,
             'created_at': datetime.now()}
 
         return session_id
@@ -41,8 +41,8 @@ class SessionExpAuth(SessionAuth):
         if 'created_at' not in session_dict:
             return None
 
-        time_passed = datetime.timedelta(seconds=self.session_duration)
+        time_passed = timedelta(seconds=self.session_duration)
         expiry_time = session_dict['created_at'] + time_passed
         if expiry_time < datetime.now():
             return None
-        return session_dict['user_id'] 
+        return session_dict['user_id']
