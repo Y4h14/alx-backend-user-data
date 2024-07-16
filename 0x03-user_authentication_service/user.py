@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """define a user class"""
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
