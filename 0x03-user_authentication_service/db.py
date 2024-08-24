@@ -64,9 +64,13 @@ class DB:
             update the user attribute as passed in method's
             arguments then commit changes in the databased
             """
-        user = self.__session.query(User).filter_by(id=user_id).first()
+        # user = self.__session.query(User).filter_by(id=user_id).first()
+        user = self.find_user_by(id=user_id)
+        if not user:
+            return
         for key, value in kwargs.items():
             if hasattr(User, key):
-                setattr(User, key, value)
+                setattr(user, key, value)
+                self._session.commit()
             else:
                 raise ValueError()

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """defines hash password method"""
 from bcrypt import hashpw, gensalt, checkpw
+from sqlalchemy.orm.exc import NoResultFound
 from db import DB
 from user import User
 import uuid
@@ -30,7 +31,7 @@ class Auth:
 
         try:
             self._db.find_user_by(email=email)
-        except Exception:
+        except NoResultFound:
             hashed_pass = _hash_password(password=password)
             user = self._db.add_user(email=email, hashed_password=hashed_pass)
             return user
@@ -52,10 +53,12 @@ class Auth:
         user = None
         try:
             user = self._db.find_user_by(email=email)
-        except Exception:
+        except NoResultFound:
             return None
         if user:
             new_session_id = _generate_uuid()
-            self._db.update_user(user.id, session_id=new_session_id)
+            try:
+                self._db.update_user(user.id, session_id=new_session_id)
+            except Exception as e:
+                print(e)
             return new_session_id
-        return None
