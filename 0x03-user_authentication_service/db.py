@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine,tuple_
+from sqlalchemy import create_engine, tuple_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import sessionmaker
@@ -46,16 +46,15 @@ class DB:
     def find_user_by(self, **kwargs) -> User:
         """finds a user with an argument"""
         fields = []
-        values = [] 
+        values = []
         for key, value in kwargs.items():
             if hasattr(User, key):
-                fields.append(getattr(User,key))
+                fields.append(getattr(User, key))
                 values.append(value)
             else:
                 raise InvalidRequestError()
         result = self._session.query(User).filter(
             tuple_(*fields).in_([tuple(values)])
         ).first()
-        if restult is none:
-            raise NoResultFound
-            
+        if result is None:
+            raise NoResultFound()
