@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """defines hash password method"""
 from bcrypt import hashpw, gensalt
 from db import DB
