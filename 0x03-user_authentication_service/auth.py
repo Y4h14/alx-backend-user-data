@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """defines hash password method"""
-from bcrypt import hashpw, gensalt
+from bcrypt import hashpw, gensalt, checkpw
 from db import DB
 from user import User
 
@@ -34,8 +34,7 @@ class Auth:
         try:
             user = self._db.find_user_by(email=email)
             if user:
-                if user.hashed_password == _hash_password(password):
-                    return True
-            return False
+                return checkpw(password.encode(), user.hashed_password)
         except Exception:
             return False
+        return False
