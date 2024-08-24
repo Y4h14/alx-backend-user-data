@@ -3,12 +3,18 @@
 from bcrypt import hashpw, gensalt, checkpw
 from db import DB
 from user import User
+import uuid
 
 
 def _hash_password(password: str) -> bytes:
     """hashes a password"""
     salt = gensalt()
     return hashpw(password=password.encode(), salt=salt)
+
+def _generate_uuid() -> str:
+    """generates a UUID.
+    """
+    return str(uuid.uuid4())
 
 
 class Auth:
@@ -20,7 +26,7 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> User:
         """Register a new user into the system"""
-        user = None
+
         try:
             self._db.find_user_by(email=email)
         except Exception:
@@ -31,6 +37,7 @@ class Auth:
 
     def valid_login(self, email: str, password: str) -> bool:
         """locates a user by email and verify the password"""
+        user = None
         try:
             user = self._db.find_user_by(email=email)
             if user:
