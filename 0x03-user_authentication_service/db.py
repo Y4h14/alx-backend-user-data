@@ -58,3 +58,15 @@ class DB:
         ).first()
         if result is None:
             raise NoResultFound()
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """user Finde_user_by to locate the user to update then
+            update the user attribute as passed in method's
+            arguments then commit changes in the databased
+            """
+        user = self.__session.query(User).filter_by(id=user_id).first()
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                setattr(User, key, value)
+            else:
+                raise ValueError()
