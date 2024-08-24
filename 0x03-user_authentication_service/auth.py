@@ -28,3 +28,14 @@ class Auth:
             user = self._db.add_user(email=email, hashed_password=hashed_pass)
             return user
         raise ValueError(f'User {email} already exitsts')
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """locates a user by email and verify the password"""
+        try:
+            user = self._db.find_user_by(email=email)
+            if user:
+                if user.hashed_password == _hash_password(password):
+                    return True
+            return False
+        except Exception:
+            return False
